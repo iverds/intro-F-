@@ -24,9 +24,15 @@ class: center, middle
 # Agenda
 
 1. Historie
-2. Values
-3. ...
+2. Verdier
+3. Funksjoner
+3. Lister, Arrays og Sekvenser
+4. Tupler
+5. Diskriminated Unions
+6. Typer
+7. Type Annotations og OData
 
+4.
 ---
 
 # Historie
@@ -35,28 +41,139 @@ class: center, middle
 - Nå: Version 3.0 (30. august)
 - Åpen kildekode under Apache-lisense
 - Språket er en variant av ML
-
+- tryfsharp.org
 ---
 
 # Variabelbinding:
 
+- Sterkt typet (selv om det ikke ser slik ut)
+- Definerer nesten aldri typen, kompilatoren tar seg av dette
+- Alle variabler blir bundet til en value
+- Variabler er standard imutable
 
-    let x = 42
+      let x = 42
 
-    let add x y = x + y
+      x = 53 -> false
 
-    printf "Sum av 42 og 52: %d" (add 42 52)
+      let mutable y = 42
+      y <- 53
+
+
+---
+# Funksjoner
+
+- Kan defineres på mange forskjellige måter
+- Siste statement i en funksjon blir alltid returnert
+- Når funksjoner kalles brukes ikke paranteser eller komma for argumentene
+- Funksjoner uten argumenter kalles med () tilslutt
+
+      let add x y = x+y
+
+      let sub x y = x - y
+
+      let fancyPrint() = printf "Fancy"
+
+      let add' = fun x y -> x + y
+
+      let sub' = function x y -> x-y
+
+      # kall av funksjoner
+
+      printf "Add 10 og 20: %d" (add 10 20)
+
+      fancyPrint()
 
 ---
 
+# Curried funksjoner
+
+- Funksjoner kan defineres utifra eksisterende funksjoner
+
+      let add x + y = x + y
+
+      let add10 = add 10
+
+      pritnf "Add something to 10: %d" (add10 15)
+
+---
+# Lister
+- Består av en type
+- Brukes gjerne i sammenheng med funksjonell programmering
+- Kan bruke list comprehensions til å lage lister
+
+      let one = [1;2;3]
+
+      let two = [1..20]
+
+      let three = [1..2..20]
+
+      let four = [for i in 1..0 -> i*2]
+
+---
+# Funksjoner på lister
+- Cons-operatoren :: legger til et element
+- Aksesserer lister med tail og head
+- @ operatoren konkatinerer lister
+
+      let listOfInt = 10::20::40::[]
+
+      let longerList = listOfInt @ [20;40]
+
+      let ten = longerList.Head
+      let rest = longerList.Tail
+
+---
+#Pattern matching
+- F# kan matche på patterns fra lister, verdier etc
+
+
+---
 # Typer
 
-Deklarerer typer med syntaks
+- Lar oss deklare "objekter"
 
     type movie = 
       {name: string; duration: int}
 
+      member x.toString() = name
+
     let aMovie = {name="Rambo", duration=120}
+
+
+---
+#Diskrimenerte unioner
+- Type-sikker versjon av C unioner
+
+      type MovieType = 
+        | Action
+        | Crime
+        | Thriller
+
+      type Cards = 
+        | Ace
+        | Others of int
+        | Jack
+        | Queen
+        | King
+
+---
+#Options
+- Some og None
+- Brukes ofte istedenfor null
+
+      type movie = 
+        {name: string; duration: int; mType: MovieType option}
+
+      let aMovie = {name="Rambo", duration=120, mType=Some(Action)}
+
+      let aMovie' = {name="Rambo2", duration=120, mType=None}
+
+      let gradeMovie movie = 
+        match movie.mType with
+        | Some(Action) -> printf "%s is a great!" movie.name
+        | Some(_) -> printf "It has at least a type!"
+        | None | _ -> printf "Pfft"
+
 
     </textarea>
     <div id="slideshow"></div>
