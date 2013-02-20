@@ -1,5 +1,4 @@
-intro-F#
-pres.html
+Introduksjon til F#
+============
 
-Introduksjon til 
-========
+Faggruppemøte programmeringsspråk 21.02.2013
