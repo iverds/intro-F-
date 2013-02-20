@@ -241,6 +241,28 @@ funksjonen ikke er ferdig definert når den kalles
 ---
 
 #Type providers
+- Kan definere typer fra eksterne datakilder
+
+      open System
+      open Microsoft.FSharp.Linq
+      open Microsoft.FSharp.Data.TypeProviders
+  
+      type Netfli = ODataService<"http://odata.netflix.com/Catalog/">
+  
+  
+      let data = Netfli.GetDataContext()
+  
+      let topMovies = query {
+          for movie in data.Titles do
+          where (movie.Name.Contains("Christmas"))
+          where (movie.ReleaseYear ?> 2000)
+          sortByNullableDescending movie.AverageRating
+          select movie
+          }
+  
+      topMovies 
+          |> Seq.take(5)
+          |> Seq.iter(fun m ->  printfn "Movie: %s\n" m.Name)
 
 
 
