@@ -23,22 +23,19 @@ class: center, middle
 
 # Agenda
 
-1. Historie
-2. Verdier
+1. Innledning
+2. Variabler, typer, lister
 3. Funksjoner
-3. Lister, Arrays og Sekvenser
-4. Tupler
-5. Diskriminated Unions
-6. Typer
-7. Type Annotations og OData
-
-4.
+4. Pattern matching
+5. Typer
+6. Kode-eksempler
 ---
 
 # Historie
 
 - Version 1.0 i 2005
 - Nå: Version 3.0 (30. august)
+- Kompilerer ned til CLRen som f.eks. C#
 - Åpen kildekode under Apache-lisense
 - Språket er en variant av ML
 - tryfsharp.org
@@ -49,17 +46,64 @@ class: center, middle
 - Sterkt typet (selv om det ikke ser slik ut)
 - Definerer nesten aldri typen, kompilatoren tar seg av dette
 - Alle variabler blir bundet til en value
-- Variabler er standard imutable
+- Variabler er standard imutable (men mutable )
 
-      let x = 42
+      let x = 42 // val isd: int
 
-      x = 53 -> false
+      x = 53 // false
 
-      let mutable y = 42
-      y <- 53
+      let mutable y = "53" // val mutable y : string
 
+      y <- "53"
 
 ---
+# Lister
+- Består av en type
+- Brukes gjerne i sammenheng med funksjonell programmering
+- Kan bruke list comprehensions til å lage lister
+
+      let one = [1;2;3] /// val one : int list
+
+      let two = [1..20] // [1;2;3;...20]
+
+      let three = [1..2..20] // [1;3;5;...19]
+
+      let four = [for i in 1..10 -> i*2]
+      // [2;4;6;8...20]
+---
+
+# Sekvenser
+- Lister henter ut alle elementer med en gang
+- Sekvenser henter de ut "lazy"
+- Benytter samme (nesten) syntaks som lister
+
+      let aSeq = seq [1;2;3]
+      let aSeq' = seq {1..10}
+
+      let aLargeSeq = seq {1I..1000000000000I}
+
+      let firstFive = Seq.take 5 aLargeSeq
+
+      Seq.iter (fun el -> printf "The element: %d" el) firstFive
+      // The element: 1, The element: 2....
+
+      
+---
+# Funksjoner på lister
+- Cons-operatoren :: legger til et element
+- Aksesserer lister med tail og head
+- @ operatoren konkatinerer lister
+
+      let listOfInt = 10::20::40::[] // [10;20;40]
+
+      let longerList = listOfInt @ [20;40] 
+      // [10;20;40;20;40]
+
+      let ten = longerList.Head // 10
+      let rest = longerList.Tail // [20;40;20;40]
+
+---
+
 # Funksjoner
 
 - Kan defineres på mange forskjellige måter
@@ -67,7 +111,7 @@ class: center, middle
 - Når funksjoner kalles brukes ikke paranteser eller komma for argumentene
 - Funksjoner uten argumenter kalles med () tilslutt
 
-      let add x y = x+y
+      let add x y = x + y
 
       let sub x y = x - y
 
@@ -89,56 +133,73 @@ class: center, middle
 
 - Funksjoner kan defineres utifra eksisterende funksjoner
 
-      let add x + y = x + y
+      let add x y = x + y
+
+      // int*int -> int
 
       let add10 = add 10
 
-      pritnf "Add something to 10: %d" (add10 15)
+      // int -> int
+
+      pritnf "Add something to 10: %d" (add10 15) // 25
+
+      let addMany w x y z = w + x + y + z
+
+      // int*int*int*int -> int
+
+      let addFew = addMany 10 20 30
+
+      // int -> int
+
+      pritnf "Add something to 60: %d" (addFew 15) // 75
 
 ---
-# Lister
-- Består av en type
-- Brukes gjerne i sammenheng med funksjonell programmering
-- Kan bruke list comprehensions til å lage lister
 
-      let one = [1;2;3]
-
-      let two = [1..20]
-
-      let three = [1..2..20]
-
-      let four = [for i in 1..0 -> i*2]
-
----
-# Funksjoner på lister
-- Cons-operatoren :: legger til et element
-- Aksesserer lister med tail og head
-- @ operatoren konkatinerer lister
-
-      let listOfInt = 10::20::40::[]
-
-      let longerList = listOfInt @ [20;40]
-
-      let ten = longerList.Head
-      let rest = longerList.Tail
-
----
 #Pattern matching
 - F# kan matche på patterns fra lister, verdier etc
+- Tegnet _ er "wildcard"
+
+      let aInt = 5
+      match aInt with
+        | 4 -> printf "Fire!"
+        | 5 -> printf "Fem!"
+        | _ -> printf "Alt annet"
+
+      let aList = [1;2;3;4]
+      let aList2 =
+        match aList with
+          | 1::_::tail -> tail
+          | head::otherhead::tail -> tail
+          | [] -> []
+
+      // val aList2: int list
+
+---
+
+# Rekursive funksjoner
+
+- Programmer leses ovenfra og ned
+- Rekursive funksjoner må derfor definers med 'rec' siden
+funksjonen ikke er ferdig definert når den kalles
+
+      let rec listSum list = 
+        match l with
+        | head::tail -> head + listSum tail
+        | [] -> 0
 
 
 ---
 # Typer
 
 - Lar oss deklare "objekter"
+- 'x' brukes for noe som ligner 'this'
 
     type movie = 
       {name: string; duration: int}
 
-      member x.toString() = name
+      override x.ToString() = name
 
     let aMovie = {name="Rambo", duration=120}
-
 
 ---
 #Diskrimenerte unioner
@@ -151,10 +212,13 @@ class: center, middle
 
       type Cards = 
         | Ace
-        | Others of int
+        | Values of int
         | Jack
         | Queen
         | King
+
+      let aCard  = Ace 
+      let aCard' = Values(2)
 
 ---
 #Options
@@ -173,6 +237,11 @@ class: center, middle
         | Some(Action) -> printf "%s is a great!" movie.name
         | Some(_) -> printf "It has at least a type!"
         | None | _ -> printf "Pfft"
+
+---
+
+#Type providers
+
 
 
     </textarea>
