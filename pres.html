@@ -135,7 +135,7 @@ class: center, middle
 
       let add x y = x + y
 
-      // int*int -> int
+      // x: int -> y: int -> int
 
       let add10 = add 10
 
@@ -153,6 +153,19 @@ class: center, middle
 
       pritnf "Add something to 60: %d" (addFew 15) // 75
 
+---
+
+# Composition funksjoner
+- Setter sammen funksjoner til nye funksjoner
+- Kan "dytte" >> en funksjon inn i en annen
+
+    let addOne x = x + 1
+    let timesTwo x = 2 * x
+    
+    let addoneThenTimesTwo = addOne >> timesTwo //  2 * (x+1)
+    let TimesTwoThenAddOne = addOne << timesTwo // (2*x) + 1
+    
+    
 ---
 
 #Pattern matching
