@@ -212,7 +212,7 @@ funksjonen ikke er ferdig definert når den kalles
 
       override x.ToString() = name
 
-      let aMovie = {name="Rambo", duration=120}
+      let aMovie = {name="Rambo"; duration=120}
 
 ---
 #Diskrimenerte unioner
@@ -241,9 +241,9 @@ funksjonen ikke er ferdig definert når den kalles
       type movie = 
         {name: string; duration: int; mType: MovieType option}
 
-      let aMovie = {name="Rambo", duration=120, mType=Some(Action)}
+      let aMovie = {name="Rambo"; duration=120; mType=Some(Action)}
 
-      let aMovie2 = {name="Rambo2", duration=120, mType=None}
+      let aMovie2 = {name="Rambo2"; duration=120; mType=None}
 
       let gradeMovie movie = 
         match movie.mType with
@@ -256,7 +256,6 @@ funksjonen ikke er ferdig definert når den kalles
 #Type providers
 - Kan definere typer fra eksterne datakilder
 
-      open System
       open Microsoft.FSharp.Linq
       open Microsoft.FSharp.Data.TypeProviders
   
