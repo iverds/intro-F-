@@ -266,11 +266,11 @@ funksjonen ikke er ferdig definert når den kalles
       /// tell alle under en ansatt
       let rec sumAllUnder(emp : Employee) = 
           1 + match emp with
-              | Engineer(id) -> 
+              | Consultant(id) -> 
                   0
-              | Manager(id, reports) -> 
+              | Senior(id, reports) -> 
                   reports |> List.sumBy sumAllUnder 
-              | Executive(id, reports, assistant) ->
+              | Manager(id, reports, assistant) ->
                   (reports |> List.sumBy sumAllUnder) + sumAllUnder assistant
 
 
