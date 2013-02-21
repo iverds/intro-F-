@@ -62,11 +62,13 @@ class: center, middle
 - Består av en samling typer
 - Kan hente ut verdier med funksjonene fst og snd
 
-      let aTuple = (1,"hello")
+      let aTuple = (1,"hello") // int * string
       
       let first = fst aTuple
       
       let second = snd aTuple
+      
+      let swap (x,y) = (y,x) // x:'a * y:'b -> 'b * 'a
 
 ---
 
