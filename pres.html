@@ -57,6 +57,20 @@ class: center, middle
       y <- "53"
 
 ---
+# Tupler
+
+- Består av en samling typer
+- Kan hente ut verdier med funksjonene fst og snd
+
+      let aTuple = (1,"hello")
+      
+      let first = fst aTuple
+      
+      let second = snd aTuple
+
+---
+
+
 # Lister
 - Består av en type
 - Brukes gjerne i sammenheng med funksjonell programmering
@@ -233,6 +247,32 @@ funksjonen ikke er ferdig definert når den kalles
 
       let aCard  = Ace 
       let aCard2 = Values(2)
+
+---
+
+#Større eksempel på tuples, og pattern matching
+
+      type Person = {     
+        First : string
+        Last  : string
+      }
+
+      /// define a discriminated union of 3 different kinds of employees
+      type Employee = 
+          | Consultant  of Person
+          | Senior   of Person * list<Employee>            
+          | Manager of Person * list<Employee> * Employee 
+  
+      /// count everyone underneath the employee in the management hierarchy, including the employee
+      let rec sumAllUnder(emp : Employee) = 
+          1 + match emp with
+              | Engineer(id) -> 
+                  0
+              | Manager(id, reports) -> 
+                  reports |> List.sumBy sumAllUnder 
+              | Executive(id, reports, assistant) ->
+                  (reports |> List.sumBy sumAllUnder) + sumAllUnder assistant
+
 
 ---
 #Options
