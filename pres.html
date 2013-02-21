@@ -161,13 +161,15 @@ class: center, middle
 
       let addMany w x y z = w + x + y + z
 
-      // int*int*int*int -> int
-
       let addFew = addMany 10 20 30
 
       // int -> int
 
       pritnf "Add something to 60: %d" (addFew 15) // 75
+      
+      let (|>) x f = f x //
+      
+      10 |> add10
 
 ---
 
