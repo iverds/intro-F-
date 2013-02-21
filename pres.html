@@ -257,13 +257,13 @@ funksjonen ikke er ferdig definert når den kalles
         Last  : string
       }
 
-      /// define a discriminated union of 3 different kinds of employees
+      /// definerer tre typer ansatte
       type Employee = 
           | Consultant  of Person
           | Senior   of Person * list<Employee>            
           | Manager of Person * list<Employee> * Employee 
   
-      /// count everyone underneath the employee in the management hierarchy, including the employee
+      /// tell alle under en ansatt
       let rec sumAllUnder(emp : Employee) = 
           1 + match emp with
               | Engineer(id) -> 
